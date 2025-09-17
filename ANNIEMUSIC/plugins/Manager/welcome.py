@@ -183,7 +183,6 @@ async def welcome(client, update: ChatMemberUpdated):
                 pass
 
         asyncio.create_task(auto_delete(sent, 60))
-        # ------------------------------------------------------------
 
         last_messages.setdefault(cid, []).append(sent)
         if len(last_messages[cid]) > WELCOME_LIMIT:
