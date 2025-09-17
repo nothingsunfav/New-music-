@@ -1,4 +1,5 @@
 import os
+import asyncio
 from datetime import datetime, timedelta, timezone
 
 from PIL import Image, ImageDraw, ImageFont
@@ -172,6 +173,16 @@ async def welcome(client, update: ChatMemberUpdated):
                 [InlineKeyboardButton(BTN_ADD,  url=f"https://t.me/{client.username}?startgroup=true")],
             ])
         )
+        
+        # --- To auto-delete the welcome message after 60 seconds ---
+        async def auto_delete(msg, delay=60):
+            await asyncio.sleep(delay)
+            try:
+                await msg.delete()
+            except Exception:
+                pass
+
+        asyncio.create_task(auto_delete(sent, 60))
 
         last_messages.setdefault(cid, []).append(sent)
         if len(last_messages[cid]) > WELCOME_LIMIT:
